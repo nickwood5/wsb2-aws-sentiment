@@ -66,6 +66,8 @@ def calculate_sentiment(file_name):
 
 
 tweet_plks = [f for f in os.listdir("input") if f.endswith("--tweets.plk")]
+print("The files are {}".format(tweet_plks))
 for p in tweet_plks:
+    print("Applying models to {}".format(p))
     calculate_sentiment(p)
 
