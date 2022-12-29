@@ -6,7 +6,7 @@ from time import time
 
 file_name = "2020-08-21 00_00_00_2020-08-31 00_00_00--tweets.plk"
 
-def calculate_sentiment(index, file_name):
+def calculate_sentiment(index, file_name, tokenizer, model):
     loop_range = 100
     average = 0
 
@@ -24,7 +24,6 @@ def calculate_sentiment(index, file_name):
     loop_start = time()
 
     for i, c in enumerate(data["content"]):
-        try:
             compound, overall_sentiment = sentiment(c)
             print("{}: {} of {}, compound = {}".format(index, i+1, len(data), compound), flush=True)
             print("NEW {}: {} of {}, compound = {}".format(index, i+1, len(data), compound), flush=True)
@@ -33,8 +32,23 @@ def calculate_sentiment(index, file_name):
             all_overall_sentiments.append(overall_sentiment)
 
             print("Try to get emotion")
-            emotion = get_emotion(c)
-            print("{}: the emotion is {}".format(index, emotion), flush=True)
+
+            
+
+            try:
+                input_ids = tokenizer.encode(c + '</s>', return_tensors='pt')
+
+                output = model.generate(input_ids=input_ids,
+                            max_length=2)
+                
+                dec = [tokenizer.decode(ids) for ids in output]
+                label = dec[0]
+                emotion = label[6:len(label)]
+                print("{}: the emotion is {}".format(index, emotion), flush=True)
+            except:
+                print("Error", flush=True)
+                sys.stdout.flush()
+
 
             all_emotions.append(emotion)
 
@@ -57,9 +71,7 @@ def calculate_sentiment(index, file_name):
 
             print("End")
             sys.stdout.flush()
-        except:
-            print("Some error occured", flush=True)
-            sys.stdout.flush()
+
 
     data["sentiment_score"] = all_compounds
     data["sentiment_label"] = all_overall_sentiments
