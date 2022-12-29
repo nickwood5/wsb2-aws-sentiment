@@ -32,7 +32,10 @@ def calculate_sentiment(index, file_name):
             all_compounds.append(compound)
             all_overall_sentiments.append(overall_sentiment)
 
+            print("Try to get emotion")
             emotion = get_emotion(c)
+            print("{}: the emotion is {}".format(index, emotion), flush=True)
+
             all_emotions.append(emotion)
 
             loop += 1
