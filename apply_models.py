@@ -1,4 +1,4 @@
-import pandas as pd, os
+import pandas as pd, os, sys
 from vader_sentiment import sentiment
 from emotions import get_emotion
 from time import time
@@ -49,6 +49,7 @@ def calculate_sentiment(index, file_name):
             
 
             loop_start = loop_end
+        sys.stdout.flush()
 
     data["sentiment_score"] = all_compounds
     data["sentiment_label"] = all_overall_sentiments
@@ -63,6 +64,8 @@ def calculate_sentiment(index, file_name):
 
     print("{}: started at {}".format(index, start_time), flush=True)
     print("{}: ended at {}".format(index, end_time), flush=True)
+
+    sys.stdout.flush()
 
 
 #tweet_plks = [f for f in os.listdir("input") if f.endswith("--tweets.plk")]
