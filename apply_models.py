@@ -6,7 +6,7 @@ from time import time
 
 file_name = "2020-08-21 00_00_00_2020-08-31 00_00_00--tweets.plk"
 
-def calculate_sentiment(file_name):
+def calculate_sentiment(index, file_name):
     loop_range = 100
     average = 0
 
@@ -44,7 +44,7 @@ def calculate_sentiment(file_name):
             remaining = len(data) - (i + 1)
             estimated_time = remaining * average
             
-            print("{} of {}, est. time remaining: {}s".format(i+1, len(data), round(estimated_time, 0)))
+            print("{}: {} of {}, est. time remaining: {}s".format(index, i+1, len(data), round(estimated_time, 0)))
             loop = 0
             
 
@@ -58,16 +58,16 @@ def calculate_sentiment(file_name):
 
     data.to_pickle(output_file, compression='infer', protocol=5, storage_options=None)
 
-    print(data)
+    print("{}: {}".format(index, data))
     end_time = time()
 
-    print(start_time)
-    print(end_time)
+    print("{}: started at {}".format(index, start_time))
+    print("{}: ended at {}".format(index, end_time))
 
 
-tweet_plks = [f for f in os.listdir("input") if f.endswith("--tweets.plk")]
-print("The files are {}".format(tweet_plks))
-for p in tweet_plks:
-    print("Applying models to {}".format(p))
-    calculate_sentiment(p)
+#tweet_plks = [f for f in os.listdir("input") if f.endswith("--tweets.plk")]
+#print("The files are {}".format(tweet_plks))
+#for p in tweet_plks:
+#    print("Applying models to {}".format(p))
+#    calculate_sentiment(p)
 
