@@ -1,9 +1,8 @@
 import pandas as pd, os, sys
 from vader_sentiment import sentiment
-from transformers import AutoTokenizer, AutoModelWithLMHead
+from emotions import get_emotion
 from time import time
-tokenizer = AutoTokenizer.from_pretrained("mrm8488/t5-base-finetuned-emotion")
-model = AutoModelWithLMHead.from_pretrained("mrm8488/t5-base-finetuned-emotion")
+
 
 file_name = "2020-08-21 00_00_00_2020-08-31 00_00_00--tweets.plk"
 
@@ -25,54 +24,33 @@ def calculate_sentiment(index, file_name):
     loop_start = time()
 
     for i, c in enumerate(data["content"]):
-            compound, overall_sentiment = sentiment(c)
-            print("{}: {} of {}, compound = {}".format(index, i+1, len(data), compound), flush=True)
-            print("NEW {}: {} of {}, compound = {}".format(index, i+1, len(data), compound), flush=True)
+        compound, overall_sentiment = sentiment(c)
+        print("{}: {} of {}, compound = {}".format(index, i+1, len(data), compound), flush=True)
+        print("NEW {}: {} of {}, compound = {}".format(index, i+1, len(data), compound), flush=True)
 
-            all_compounds.append(compound)
-            all_overall_sentiments.append(overall_sentiment)
+        all_compounds.append(compound)
+        all_overall_sentiments.append(overall_sentiment)
 
-            print("Try to get emotion")
+        emotion = get_emotion(c)
+        all_emotions.append(emotion)
 
+        loop += 1
+
+        if loop >= loop_range:
+            loop_end = time()
+
+            elapsed_time = loop_end - loop_start
+
+            average = elapsed_time / loop_range
+            remaining = len(data) - (i + 1)
+            estimated_time = remaining * average
+            
+            print("{}: {} of {}, est. time remaining: {}s".format(index, i+1, len(data), round(estimated_time, 0)), flush=True)
+            loop = 0
             
 
-            try:
-                input_ids = tokenizer.encode(c + '</s>', return_tensors='pt')
-
-                output = model.generate(input_ids=input_ids,
-                            max_length=2)
-                
-                dec = [tokenizer.decode(ids) for ids in output]
-                label = dec[0]
-                emotion = label[6:len(label)]
-                print("{}: the emotion is {}".format(index, emotion), flush=True)
-            except:
-                print("Error", flush=True)
-                sys.stdout.flush()
-
-
-            all_emotions.append(emotion)
-
-            loop += 1
-
-            if loop >= loop_range:
-                loop_end = time()
-
-                elapsed_time = loop_end - loop_start
-
-                average = elapsed_time / loop_range
-                remaining = len(data) - (i + 1)
-                estimated_time = remaining * average
-                
-                print("{}: {} of {}, est. time remaining: {}s".format(index, i+1, len(data), round(estimated_time, 0)), flush=True)
-                loop = 0
-                
-
-                loop_start = loop_end
-
-            print("End")
-            sys.stdout.flush()
-
+            loop_start = loop_end
+        sys.stdout.flush()
 
     data["sentiment_score"] = all_compounds
     data["sentiment_label"] = all_overall_sentiments
