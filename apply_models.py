@@ -1,12 +1,13 @@
 import pandas as pd, os, sys
 from vader_sentiment import sentiment
-from emotions import get_emotion
+from transformers import AutoTokenizer, AutoModelWithLMHead
 from time import time
-
+tokenizer = AutoTokenizer.from_pretrained("mrm8488/t5-base-finetuned-emotion")
+model = AutoModelWithLMHead.from_pretrained("mrm8488/t5-base-finetuned-emotion")
 
 file_name = "2020-08-21 00_00_00_2020-08-31 00_00_00--tweets.plk"
 
-def calculate_sentiment(index, file_name, tokenizer, model):
+def calculate_sentiment(index, file_name):
     loop_range = 100
     average = 0
 
