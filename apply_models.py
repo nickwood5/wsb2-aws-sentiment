@@ -25,7 +25,7 @@ def calculate_sentiment(index, file_name):
 
     for i, c in enumerate(data["content"]):
         compound, overall_sentiment = sentiment(c)
-        print("{}: {} of {}, compound = {}".format(index, i+1, len(data), compound))
+        print("{}: {} of {}, compound = {}".format(index, i+1, len(data), compound), flush=True)
 
         all_compounds.append(compound)
         all_overall_sentiments.append(overall_sentiment)
@@ -44,7 +44,7 @@ def calculate_sentiment(index, file_name):
             remaining = len(data) - (i + 1)
             estimated_time = remaining * average
             
-            print("{}: {} of {}, est. time remaining: {}s".format(index, i+1, len(data), round(estimated_time, 0)))
+            print("{}: {} of {}, est. time remaining: {}s".format(index, i+1, len(data), round(estimated_time, 0)), flush=True)
             loop = 0
             
 
@@ -58,11 +58,11 @@ def calculate_sentiment(index, file_name):
 
     data.to_pickle(output_file, compression='infer', protocol=5, storage_options=None)
 
-    print("{}: {}".format(index, data))
+    print("{}: {}".format(index, data), flush=True)
     end_time = time()
 
-    print("{}: started at {}".format(index, start_time))
-    print("{}: ended at {}".format(index, end_time))
+    print("{}: started at {}".format(index, start_time), flush=True)
+    print("{}: ended at {}".format(index, end_time), flush=True)
 
 
 #tweet_plks = [f for f in os.listdir("input") if f.endswith("--tweets.plk")]
