@@ -25,7 +25,7 @@ def calculate_sentiment(index, file_name):
 
     for i, c in enumerate(data["content"]):
         compound, overall_sentiment = sentiment(c)
-        #print("{} of {}, compound = {}".format(i+1, len(data), compound))
+        print("{}: {} of {}, compound = {}".format(index, i+1, len(data), compound))
 
         all_compounds.append(compound)
         all_overall_sentiments.append(overall_sentiment)
