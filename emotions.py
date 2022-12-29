@@ -14,4 +14,5 @@ def get_emotion(text):
     label = dec[0]
     return label[6:len(label)]
   except:
-    print("Error")
+    print("Error", flush=True)
+    sys.stdout.flush()
