@@ -51,6 +51,8 @@ def calculate_sentiment(index, file_name):
                 
 
                 loop_start = loop_end
+
+            print("End")
             sys.stdout.flush()
         except:
             print("Some error occured", flush=True)
