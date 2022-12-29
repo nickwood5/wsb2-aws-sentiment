@@ -1,6 +1,8 @@
 import os
 from multiprocessing import Process
 from apply_models import calculate_sentiment
+import nltk
+nltk.download('omw-1.4')
 
 # Create new threads
 if __name__ == '__main__':

@@ -17,7 +17,11 @@ def calculate_sentiment(index, file_name):
 
     all_compounds = []
     all_overall_sentiments = []
-    all_emotions = []
+    all_happy = []
+    all_angry = []
+    all_sad = []
+    all_fear = []
+    all_surprise = []
 
     loop = 0
 
@@ -31,8 +35,19 @@ def calculate_sentiment(index, file_name):
         all_compounds.append(compound)
         all_overall_sentiments.append(overall_sentiment)
 
-        emotion = get_emotion(c)
-        all_emotions.append(emotion)
+        emotions = get_emotion(c)
+        happy = emotions["Happy"]
+        angry = emotions["Angry"]
+        sad = emotions["Sad"]
+        fear = emotions["Fear"]
+        surprise = emotions["Surprise"]
+
+        print("emotion is {}".format(emotions))
+        all_happy.append(happy)
+        all_angry.append(angry)
+        all_sad.append(sad)
+        all_fear.append(fear)
+        all_surprise.append(surprise)
 
         loop += 1
 
@@ -54,7 +69,12 @@ def calculate_sentiment(index, file_name):
 
     data["sentiment_score"] = all_compounds
     data["sentiment_label"] = all_overall_sentiments
-    data["emotion_label"] = all_emotions
+    data["happy"] = all_happy
+    data["fear"] = all_fear
+    data["angry"] = all_angry
+    data["sad"] = all_sad
+    data["surprise"] = all_surprise
+
 
     output_file = "output/SENTIMENTS_" + file_name
 
